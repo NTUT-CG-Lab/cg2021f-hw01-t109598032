@@ -7,7 +7,7 @@
 		<link type="text/css" rel="stylesheet" href="main.css">
 	</head>
 	<body>
-		<div style="position: absolute; top:10px; left:0px" id="score_table"></div>
+		<div style="position: absolute; top:10px; left:0px" id="score_table">    </div>
 		<div id="info">
 			<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> - TTFLoader using opentype by gero3
 			<br/>type to enter new text, drag to spin the text
@@ -110,11 +110,12 @@
 			var clock_ani_group;
 
 			var ply_mesh01, ply_mesh02, ply_loader, ply_parent01, ply_parent02, ply_group;
+			var ply_move_x = 10;
 
 			var circle_arr = [];
 			var deetsu = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
-			var link_base0 = "https://github.com/NTUT-CG-Lab/cg2021f-hw";
-			var link_base1 = "-t109598032";
+			var link_base0 = "https://ntut-cg-lab.github.io/cg2021f-hw";
+			var link_base1 = "-t109598032/";
 			var link=[];
 			for(let i=0; i<12; i++){
 				if (i < 9)
@@ -311,11 +312,11 @@
 					);
 					ply_parent01.add(ply_mesh01);
 					ply_parent01.position.x = -200;
-					ply_parent01.position.y = -30;
-					ply_parent01.position.z = 0;
+					ply_parent01.position.y = 0;
+					ply_parent01.position.z = -50;
 					// ply_parent01.rotation.x = - Math.PI / 2;
 					ply_parent01.rotation.y = - Math.PI;
-					ply_parent01.scale.multiplyScalar( 800 );
+					ply_parent01.scale.multiplyScalar( 500 );
 					ply_parent01.castShadow = true;
 					ply_parent01.receiveShadow = true;					
 					scene.add( ply_parent01 );
@@ -327,11 +328,11 @@
 					);
 					ply_parent02.add(ply_mesh02);
 					ply_parent02.position.x = 200;
-					ply_parent02.position.y = -30;
-					ply_parent02.position.z = 0;
+					ply_parent02.position.y = 0;
+					ply_parent02.position.z = -50;
 					// ply_parent02.rotation.x = - Math.PI / 2;
 					ply_parent02.rotation.y = - 4 * Math.PI / 2;
-					ply_parent02.scale.multiplyScalar( 800 );
+					ply_parent02.scale.multiplyScalar( 500 );
 					ply_parent02.castShadow = true;
 					ply_parent02.receiveShadow = true;
 					scene.add( ply_parent02 );
@@ -351,7 +352,7 @@
 
 				// Plane
 				const plane = new THREE.Mesh(
-					new THREE.PlaneGeometry( 500, 500 ),
+					new THREE.PlaneGeometry( 1000, 1000 ),
 					new THREE.MeshBasicMaterial( { color: 0xffffff, opacity: 0.5, transparent: true } )
 				);
 				plane.position.y = 0;
@@ -645,21 +646,27 @@
 				requestAnimationFrame( animate_ply );
 
 				var date = new Date();
-				var timer = date.getSeconds();
+				var timer = date.getMilliseconds();
+
+				if (ply_parent01.position.x <= -380 || ply_parent01.position.x >= 380){
+					ply_move_x = ply_move_x * (-1);
+				}
 
 				// ply_parent01.position.x = -200;
 				// ply_parent01.position.y = 200;
 				// ply_parent01.position.z = 0;
 				// ply_parent01.rotation.x = ply_parent01.rotation.x * timer;
 				// ply_parent01.rotation.x = ply_parent01.rotation.x - Math.PI *timer
-				ply_parent01.rotation.y = Math.PI/180 *timer*2
+				ply_parent01.rotation.y = Math.PI/180 *timer*0.5
+				ply_parent01.position.x += ply_move_x;
 
 				// ply_parent02.position.x = 200;
 				// ply_parent02.position.y = 200;
 				// ply_parent02.position.z = 0;
 				// ply_parent02.rotation.y = ply_parent02.rotation.y + Math.PI;
 				// ply_parent02.rotation.y = ply_parent02.rotation.y - Math.PI
-				ply_parent02.rotation.y = -Math.PI/180 *timer*2
+				ply_parent02.rotation.y = -Math.PI/180 *timer*0.5
+				ply_parent02.position.x -= ply_move_x;
 
 				//ply_group.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 180);
 
